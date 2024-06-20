@@ -44,4 +44,14 @@ public class AuthService {
                 .token(jwtService.getToken(user))
                 .build();
     }
+
+    public boolean verifyToken(String token) {
+        try {
+            String username = jwtService.getUsernameFromToken(token);
+            UserDetails userDetails = userRepository.findByUsername(username).orElseThrow();
+            return jwtService.isTokenValid(token, userDetails);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
